@@ -1,8 +1,8 @@
-clc 
+clc
 clear all
-close all 
+close all
 
-lbr = importrobot("C:\Users\marco\Desktop\Thesis\Kinematics_Matlab\inverse\model\LRM_ARM_simplified_fixed.urdf");
+lbr = importrobot("C:\Users\marco\Documents\GitHub\Thesis\Kinematics_Matlab\inverse\model\LRM_ARM_60_0_1.urdf");
 lbr.DataFormat = 'row';
 gripper = 'end_effector';
 target = [-0.12 0 0.24];

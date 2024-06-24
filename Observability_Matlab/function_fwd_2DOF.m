@@ -1,7 +1,7 @@
 eps = 0.00001;
 
 % angles 
-theta = [0 pi/8];
+theta = [0 0];
 % d
 d = [76 0];
 % a
@@ -48,33 +48,33 @@ function [posgripper] = End_effector_pos(theta, d, a, alpha, x_gripper, y_grippe
     T02 = T01 * A12;
     Tgripper = T02 * A;
 
-% Extract joint positions
-pos0 = A_base(1:3, 4);
-pos1 = T01(1:3, 4);
-pos2 = T02(1:3, 4);
-posgripper = Tgripper(1:3, 4);
-
-posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
-posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
-posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
-
-% Plot the points as red big dots with a line connecting them
-figure(2);
-scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
-grid on;
-axis equal
-xlabel('X');
-ylabel('Y');
-zlabel('Z');
-title('3D Coordinates');
-hold on;
-
-% Plot reference frames at each joint
-scale = 20; % Scale for the quiver arrows
-plotFrame(A_base, scale);
-plotFrame(T01, scale);
-plotFrame(T02, scale);
-plotFrame(Tgripper, scale);
+    % Extract joint positions
+    pos0 = A_base(1:3, 4);
+    pos1 = T01(1:3, 4);
+    pos2 = T02(1:3, 4);
+    posgripper = Tgripper(1:3, 4);
+    
+    posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
+    posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
+    posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
+    
+    % Plot the points as red big dots with a line connecting them
+    figure(2);
+    scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+    grid on;
+    axis equal
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    title('3D Coordinates');
+    hold on;
+    
+    % Plot reference frames at each joint
+    scale = 20; % Scale for the quiver arrows
+    plotFrame(A_base, scale);
+    plotFrame(T01, scale);
+    plotFrame(T02, scale);
+    plotFrame(Tgripper, scale);
 end
 
 function plotFrame(T, scale)
