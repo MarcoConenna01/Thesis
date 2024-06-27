@@ -40,51 +40,54 @@ function [P,t] = End_effector_pos_2DOF(m, cm, theta, d, a, alpha, x_gripper, y_g
 
     % torque calculations
     t2 = cross((poscm02 - pos2), [0 0 -9.81*m(2)]);
-    rot = T02(1:3,1:3) * [0 0 1]';
-    t2_theta = t2*rot;
+    rot2 = T02(1:3,1:3) * [0 0 1]';
+    t2_theta = t2*rot2;
 
-    t1 = cross((poscm02 - pos1), [0 0 -9.81*m(2)]) + cross((poscm01 - pos1), [0 0 -9.81*m(1)]);
-    rot = A_base(1:3,1:3) * [0 0 1]';
-    t1_theta = t1*rot;
+    t1 = cross((poscm02 - pos0), [0 0 -9.81*m(2)]) + cross((poscm01 - pos0), [0 0 -9.81*m(1)]);
+    rot1 = A_base(1:3,1:3) * [0 0 1]';
+    t1_theta = t1*rot1;
     
     rot = A_base(1:3,1:3) * [0 1 0]';
     t0_beta = t1*rot;
 
-    t = [t1_theta t2_theta t0_beta];
+    t = [t0_beta t1_theta t2_theta];
 
     % Vector of joints position
-%     posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
-%     posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
-%     posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
-% 
-%     % Vector of cm positions
-%     posxx = [poscm01(1) poscm02(1)];
-%     posyy = [poscm01(2) poscm02(2)];
-%     poszz = [poscm01(3) poscm02(3)];
-% 
-%     % Plot the points as red big dots with a line connecting them
-%     figure(2);
-%     scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
-%     grid on;
-%     axis equal
-%     xlabel('X');
-%     ylabel('Y');
-%     zlabel('Z');
-%     title('3D Coordinates');
-%     hold on;
+    posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
+    posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
+    posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
 
-%     % Plot the centers of mass
-%     scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
-%     text(posxx, posyy, poszz, ['cm01';'cm02'])
-%     
-%     % Plot reference frames at each joint
-%     scale = 20; % Scale for the quiver arrows
-%     plotFrame(A_base, scale);
-%     plotFrame(T01, scale);
-%     plotFrame(T02, scale);
-%     plotFrame(Tgripper, scale);
+    % Vector of cm positions
+    posxx = [poscm01(1) poscm02(1)];
+    posyy = [poscm01(2) poscm02(2)];
+    poszz = [poscm01(3) poscm02(3)];
 
+    % Plot the points as red big dots with a line connecting them
+    figure(2);
+    scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+    grid on;
+    axis equal
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    title('3D Coordinates');
+    hold on;
 
+    % Plot the centers of mass
+    scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+    text(posxx, posyy, poszz, ['cm01';'cm02'])
+    
+    % Plot reference frames at each joint
+    scale = 20; % Scale for the quiver arrows
+    plotFrame(A_base, scale);
+    plotFrame(T01, scale);
+    plotFrame(T02, scale);
+    plotFrame(Tgripper, scale);
+
+    % Plot rot rot1 and rot2
+    plotVector(pos0, rot, scale, 'yellow');
+    plotVector(pos0, rot1, scale, 'magenta');
+    plotVector(pos2, rot2, scale, 'cyan');
 end
 
 % Define the buildHD function
@@ -105,3 +108,6 @@ function plotFrame(T, scale)
     quiver3(origin(1), origin(2), origin(3), z_axis(1), z_axis(2), z_axis(3), 'b');
 end
 
+function plotVector(origin, vector, scale, color)
+    quiver3(origin(1), origin(2), origin(3), vector(1)*scale, vector(2)*scale, vector(3)*scale, 'Color', color, 'LineWidth', 1.5);
+end

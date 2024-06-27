@@ -1,5 +1,5 @@
 function [P,t] = End_effector_pos_2DOF(m, cm, theta, d, a, alpha, x_gripper, y_gripper, z_gripper, x_base, y_base, z_base, angle_gripper_alpha, angle_gripper_beta, angle_base_alpha, angle_base_beta)
-    theta = [0 0];
+
     % end-effector translation and rotation
     A_transl = [1 0 0 x_gripper; 0 1 0 y_gripper; 0 0 1 z_gripper; 0 0 0 1];
     Aalpha = [1 0 0 0; 0 cos(angle_gripper_alpha) -sin(angle_gripper_alpha) 0; 0 sin(angle_gripper_alpha) cos(angle_gripper_alpha) 0; 0 0 0 1];
@@ -40,17 +40,17 @@ function [P,t] = End_effector_pos_2DOF(m, cm, theta, d, a, alpha, x_gripper, y_g
 
     % torque calculations
     t2 = cross((poscm02 - pos2), [0 0 -9.81*m(2)]);
-    rot = T02(1:3,1:3) * [0 0 1]';
-    t2_theta = t2*rot;
+    rot2 = T02(1:3,1:3) * [0 0 1]';
+    t2_theta = t2*rot2;
 
     t1 = cross((poscm02 - pos1), [0 0 -9.81*m(2)]) + cross((poscm01 - pos1), [0 0 -9.81*m(1)]);
-    rot = A_base(1:3,1:3) * [0 0 1]';
-    t1_theta = t1*rot;
+    rot1 = A_base(1:3,1:3) * [0 0 1]';
+    t1_theta = t1*rot1;
     
     rot = A_base(1:3,1:3) * [0 1 0]';
     t0_beta = t1*rot;
 
-    t = [t1_theta t2_theta t0_beta];
+    t = [t0_beta t1_theta t2_theta];
 
     % Vector of joints position
     posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
@@ -83,7 +83,6 @@ function [P,t] = End_effector_pos_2DOF(m, cm, theta, d, a, alpha, x_gripper, y_g
     plotFrame(T01, scale);
     plotFrame(T02, scale);
     plotFrame(Tgripper, scale);
-
 
 end
 

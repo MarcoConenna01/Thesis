@@ -34,14 +34,14 @@ while flag == 0
             for j = 1:(n+1)    
                 % Observability Matrix
                 JJ = Jacobian_parametric_2DOF(psi(j,2:3));
-                %Jacobian_total(j*3-2:j*3,:) = JJ(1:3,:);
+                Jacobian_total(j*3-2:j*3,:) = JJ(1:3,:);
                 %adding orientation of the end effector
-                Jacobian_total(j*6-5:j*6,:) = JJ;
+                %Jacobian_total(j*6-5:j*6,:) = JJ;
             end
             % calculate index
             S = svd(Jacobian_total);
-            %O(i) = (prod(S))^(1/length(S))/(sqrt(n+1));
-            O(i) = S(end)^2/S(1);
+            O(i) = (prod(S))^(1/length(S))/(sqrt(n+1));
+            %O(i) = S(end)^2/S(1);
             clear Jacobian_total
         end
     end
@@ -59,15 +59,15 @@ while flag == 0
         for j = 1:n
             % Observability Matrix
             JJ = Jacobian_parametric_2DOF(psi_deleted(j,2:3)); 
-            %Jacobian_total(j*3-2:j*3,:) = JJ(1:3,:);
+            Jacobian_total(j*3-2:j*3,:) = JJ(1:3,:);
             %adding orientation of the end effector
-            Jacobian_total(j*6-5:j*6,:) = JJ; 
+            %Jacobian_total(j*6-5:j*6,:) = JJ; 
         end
 
             % calculate index
             S = svd(Jacobian_total);
-            %O(i) = (prod(S))^(1/length(S))/(sqrt(n));
-            O(i) = S(end)^2/S(1);
+            O(i) = (prod(S))^(1/length(S))/(sqrt(n));
+            %O(i) = S(end)^2/S(1);
             clear Jacobian_total
        
     end
