@@ -62,32 +62,32 @@ function [P,t] = End_effector_pos_2DOF(m, cm, theta, d, a, alpha, x_gripper, y_g
     posyy = [poscm01(2) poscm02(2)];
     poszz = [poscm01(3) poscm02(3)];
 
-    % Plot the points as red big dots with a line connecting them
-    figure(2);
-    scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
-    grid on;
-    axis equal
-    xlabel('X');
-    ylabel('Y');
-    zlabel('Z');
-    title('3D Coordinates');
-    hold on;
-
-    % Plot the centers of mass
-    scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
-    text(posxx, posyy, poszz, ['cm01';'cm02'])
-    
-    % Plot reference frames at each joint
-    scale = 20; % Scale for the quiver arrows
-    plotFrame(A_base, scale);
-    plotFrame(T01, scale);
-    plotFrame(T02, scale);
-    plotFrame(Tgripper, scale);
-
-    % Plot rot rot1 and rot2
-    plotVector(pos0, rot, scale, 'yellow');
-    plotVector(pos0, rot1, scale, 'magenta');
-    plotVector(pos2, rot2, scale, 'cyan');
+%     % Plot the points as red big dots with a line connecting them
+%     figure(2);
+%     scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+%     grid on;
+%     axis equal
+%     xlabel('X');
+%     ylabel('Y');
+%     zlabel('Z');
+%     title('3D Coordinates');
+%     hold on;
+% 
+%     % Plot the centers of mass
+%     scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+%     text(posxx, posyy, poszz, ['cm01';'cm02'])
+%     
+%     % Plot reference frames at each joint
+%     scale = 20; % Scale for the quiver arrows
+%     plotFrame(A_base, scale);
+%     plotFrame(T01, scale);
+%     plotFrame(T02, scale);
+%     plotFrame(Tgripper, scale);
+% 
+%     % Plot rot rot1 and rot2
+%     plotVector(pos0, rot, scale, 'yellow');
+%     plotVector(pos0, rot1, scale, 'magenta');
+%     plotVector(pos2, rot2, scale, 'cyan');
 end
 
 % Define the buildHD function
