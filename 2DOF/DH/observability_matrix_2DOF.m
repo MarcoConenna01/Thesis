@@ -1,10 +1,10 @@
 clc
-clear all
+clearvars
 close all
 
 %% List of possible conf-wrench combinations
 
-n_parameters = 21;
+n_parameters = 27;
 v = zeros(1,n_parameters);
 eps = 10^-8;
 n_theta = 10;
@@ -12,7 +12,7 @@ n_configuration = n_theta^2;
 field = linspace(-10*pi/18,10*pi/18,n_theta);
 counter = 0;
 configuration = zeros(n_configuration,3);
-option = 4;
+option = 1;
 
 for i = 1:n_theta
     for j = 1:n_theta    

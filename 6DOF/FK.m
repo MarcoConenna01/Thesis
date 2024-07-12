@@ -183,31 +183,31 @@ function [P, t] = End_effector_pos(theta, v)
     posyy = [poscm01(2) poscm02(2) poscm03(2) poscm04(2) poscm05(2) poscm06(2)];
     poszz = [poscm01(3) poscm02(3) poscm03(3) poscm04(3) poscm05(3) poscm06(3)];
     
-%     % Plot the points as red big dots with a line connecting them
-%     figure();
-%     scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
-%     text(posx, posy, posz, ['0';'1';'2';'3';'4';'5';'6';'7'])
-%     grid on;
-%     axis equal
-%     xlabel('X');
-%     ylabel('Y');
-%     zlabel('Z');
-%     title('3D Coordinates');
-%     hold on;
-%     
-%     % Plot the centers of mass
-%     scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
-%     text(posxx, posyy, poszz, ['cm01';'cm02';'cm03';'cm04';'cm05';'cm06'])
-%     
-%     % Plot reference frames at each joint
-%     scale = 20; % Scale for the quiver arrows
-%     plotFrame(A_base, scale);
-%     plotFrame(T02, scale);
-%     plotFrame(T03, scale);
-%     plotFrame(T04, scale);
-%     plotFrame(T05, scale);
-%     plotFrame(T06, scale);
-%     plotFrame(Tgripper, scale);
+    % Plot the points as red big dots with a line connecting them
+    figure();
+    scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+    text(posx, posy, posz, ['0';'1';'2';'3';'4';'5';'6';'7'])
+    grid on;
+    axis equal
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    title('3D Coordinates');
+    hold on;
+    
+    % Plot the centers of mass
+    scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+    text(posxx, posyy, poszz, ['cm01';'cm02';'cm03';'cm04';'cm05';'cm06'])
+    
+    % Plot reference frames at each joint
+    scale = 20; % Scale for the quiver arrows
+    plotFrame(A_base, scale);
+    plotFrame(T02, scale);
+    plotFrame(T03, scale);
+    plotFrame(T04, scale);
+    plotFrame(T05, scale);
+    plotFrame(T06, scale);
+    plotFrame(Tgripper, scale);
 
 end
 

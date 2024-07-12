@@ -1,17 +1,17 @@
 function [P,t] = FK_2DOF(theta, v)
 
-    tau = [0 0 0];
-    tau(1) = tau(1) + v(7);
-    tau(2) = tau(2) + v(8);
-    tau(3) = tau(3) + v(9);
+    k = [1 1 1] * 10^-8;
+    k(1) = k(1) + v(7);
+    k(2) = k(2) + v(8);
+    k(3) = k(3) + v(9);
     error = 100;
     [P, t] = End_effector_pos_2DOF(theta, v);
     
     vv = v;
     while error > 10^-6
         P_0 = P;
-        theta_new = theta + tau(2:3).*t(2:3);
-        vv(16) = v(16) + tau(1)*t(1);
+        theta_new = theta + [k(2) k(3)].*t(2:3);
+        vv(16) = v(16) + k(1)*t(1);
         [P, t] = End_effector_pos_2DOF(theta_new, vv);
         vv(16) = v(16);
         error = norm(abs(P-P_0));
@@ -32,11 +32,13 @@ function [P,t] = End_effector_pos_2DOF(theta, v)
     z_gripper = 103.505;
     angle_base_alpha = 0;
     angle_base_beta = pi/3;
-    x_base = 0;
-    y_base = 46.138614 - 0.1579;
+    x_base = 46.2333 - 0.157859; 
+    y_base = 0;
     z_base = 82.012;
-    cm = [ 0 0 45; 0 0 65];
-    m = [123.4 177];
+    %cm = [0 2 37.325; 10 0 62.385];
+    cm = [0 2 37.32; 12.46484 -0.20331 47.6142]; % added target cm
+    m = [123.4 224.2];
+    g_vector = [0 0 -9.81]';
     
     % add the calibration parameters to the geometric parameters
     alpha(1) = alpha(1) + v(1);
@@ -57,6 +59,7 @@ function [P,t] = End_effector_pos_2DOF(theta, v)
     z_gripper = z_gripper + v(19);
     angle_gripper_alpha = angle_gripper_alpha + v(20);
     angle_gripper_beta = angle_gripper_beta + v(21);
+    cm = cm + [v(22) v(23) v(24); v(25) v(26) v(27)];
 
     % end-effector translation and rotation
     A_transl = [1 0 0 x_gripper; 0 1 0 y_gripper; 0 0 1 z_gripper; 0 0 0 1];
@@ -90,18 +93,18 @@ function [P,t] = End_effector_pos_2DOF(theta, v)
     
     % Compute positions of centers of mass of each joint
     cm01 = A_base * [1 0 0 cm(1,1); 0 1 0 cm(1,2); 0 0 1 cm(1,3); 0 0 0 1];
-    cm02 = Tgripper * [1 0 0 cm(2,1); 0 1 0 cm(2,2); 0 0 1 cm(2,3)-z_gripper; 0 0 0 1];       
+    cm02 = Tgripper * [1 0 0 cm(2,1); 0 1 0 cm(2,2); 0 0 1 cm(2,3)-z_gripper; 0 0 0 1];    
 
     % Extract centers of mass positions
     poscm01 = cm01(1:3, 4);
     poscm02 = cm02(1:3, 4);
 
     % torque calculations
-    t2 = cross((poscm02 - pos2), [0 0 -9.81*m(2)]);
+    t2 = cross((poscm02 - pos2), m(2)*g_vector');
     rot2 = T02(1:3,1:3) * [0 0 1]';
     t2_theta = t2*rot2;
 
-    t1 = cross((poscm02 - pos0), [0 0 -9.81*m(2)]) + cross((poscm01 - pos0), [0 0 -9.81*m(1)]);
+    t1 = cross((poscm02 - pos0), m(2)*g_vector') + cross((poscm01 - pos0), m(1)*g_vector');
     rot1 = A_base(1:3,1:3) * [0 0 1]';
     t1_theta = t1*rot1;
     
@@ -110,37 +113,37 @@ function [P,t] = End_effector_pos_2DOF(theta, v)
 
     t = [t0_beta t1_theta t2_theta];
 
-    % Vector of joints position
-    posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
-    posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
-    posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
-
-    % Vector of cm positions
-    posxx = [poscm01(1) poscm02(1)];
-    posyy = [poscm01(2) poscm02(2)];
-    poszz = [poscm01(3) poscm02(3)];
-
-    % Plot the points as red big dots with a line connecting them
-    figure(2);
-    scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
-    grid on;
-    axis equal
-    xlabel('X');
-    ylabel('Y');
-    zlabel('Z');
-    title('3D Coordinates');
-    hold on;
-
-    % Plot the centers of mass
-    scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
-    text(posxx, posyy, poszz, ['cm01';'cm02'])
-    
-    % Plot reference frames at each joint
-    scale = 20; % Scale for the quiver arrows
-    plotFrame(A_base, scale);
-    plotFrame(T01, scale);
-    plotFrame(T02, scale);
-    plotFrame(Tgripper, scale);
+%     % Vector of joints position
+%     posx = [0 pos0(1) pos1(1) pos2(1) posgripper(1)];
+%     posy = [0 pos0(2) pos1(2) pos2(2) posgripper(2)];
+%     posz = [0 pos0(3) pos1(3) pos2(3) posgripper(3)];
+% 
+%     % Vector of cm positions
+%     posxx = [poscm01(1) poscm02(1)];
+%     posyy = [poscm01(2) poscm02(2)];
+%     poszz = [poscm01(3) poscm02(3)];
+% 
+%     % Plot the points as red big dots with a line connecting them
+%     figure(2);
+%     scatter3(posx, posy, posz, 'o', 'MarkerFaceColor', 'b', 'MarkerEdgeColor', 'b');
+%     grid on;
+%     axis equal
+%     xlabel('X');
+%     ylabel('Y');
+%     zlabel('Z');
+%     title('3D Coordinates');
+%     hold on;
+% 
+%     % Plot the centers of mass
+%     scatter3(posxx, posyy, poszz, 'o', 'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+%     text(posxx, posyy, poszz, ['cm01';'cm02'])
+%     
+%     % Plot reference frames at each joint
+%     scale = 20; % Scale for the quiver arrows
+%     plotFrame(A_base, scale);
+%     plotFrame(T01, scale);
+%     plotFrame(T02, scale);
+%     plotFrame(Tgripper, scale);
 
 %     % Plot rot rot1 and rot2
 %     plotVector(pos0, rot, scale, 'yellow');
