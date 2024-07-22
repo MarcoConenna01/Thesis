@@ -3,18 +3,14 @@ clear all
 close all
 
 % List of possible conf-wrench combinations
-n_parameters = 41;
+n_parameters = 42;
 v = zeros(1,n_parameters);
 eps = 10^-8;
-option = 1;
+option = 4;
 
-n_theta = 3;
-n_configuration = n_theta^6;
-configuration = zeros(n_configuration,7);
-field = linspace(-10*pi/18, 10*pi/18, n_theta);
-[field1, field2, field3, field4, field5, field6] = ndgrid(field, field, field, field, field, field);
-configuration(:,2:7) = [field6(:), field5(:), field4(:), field3(:), field2(:), field1(:)];
-configuration(:,1) = linspace(1,n_configuration, n_configuration);
+load goodconf_corrected.mat
+configuration = goodconf_corrected;
+n_configuration = height(configuration);
 
 % Observability Matrix
 counter = 0;
@@ -27,9 +23,8 @@ deleted = 0; % pointer of deleted conf
 
 while flag == 0
     tic
-
     for i = 1:(n_configuration) % step b
-        i
+        i;
         if ~ismember(configuration(i, 1), psi(:,1)) 
             psi(n+1,:) = configuration(i, :);
             for j = 1:(n+1)    
@@ -48,7 +43,8 @@ while flag == 0
 
     % check which gave the best O (observability index) and add it to the conf, then do the same
     % thing deleting one
-    [~, added] = max(O);
+    [test, added] = max(O);
+    test
     psi(n+1, :) = [configuration(added, :)];
     O = zeros(1, n_configuration);
    
@@ -83,7 +79,7 @@ while flag == 0
 
     psi(deleted, :) = [];
     O = zeros(1, n_configuration);
-    counter = counter + 1
+    counter = counter + 1;
     toc
 end
 

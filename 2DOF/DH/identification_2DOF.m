@@ -28,7 +28,6 @@ while error2 < 1 - 10^-12
     % use current v to calculate the Identification Jacobian Matrix J
     for j = 1:height(psi)
         theta = psi(j,2:3);
-        gravity = g_m(j,:);
         J = Jacobian_parametric_2DOF(theta,v, eps, option);
         Jacobian_total(j*3-2:j*3,:) = J(1:3,:);
     end
@@ -36,7 +35,6 @@ while error2 < 1 - 10^-12
     % use the current v to find the estimated position for all the conf
     for i = 1:height(psi)
         theta = psi(i,2:3);
-        gravity = g_m(i,:);
         P = FK_2DOF(theta, v);
         x_est(3*i-2:3*i,1) = P(1:3);
     end
