@@ -1,19 +1,13 @@
-clc
-clearvars
+function v = Identification_loop(option, psi, goodconf_corrected, position_measured_rotated)
 
 %% IDENTIFICATION
 
 % import chosen configurations
-load psi_loop
-load LRM_ARM_data/goodconf_corrected
 goodconf = goodconf_corrected;
-option = 1;
 
 % import measured positions 
-load LRM_ARM_data/measured_rotated.mat
 position_measured = -position_measured_rotated;
 position_measured(:,3) = -position_measured(:,3); % to correct for base frame placed backwards
-g_m = zeros(height(psi),2);
 for i = 1:height(psi)
     for j = 1:height(goodconf)
         if psi(i,1) == goodconf(j,1)
@@ -25,13 +19,10 @@ end
 
 x_est = zeros(height(psi),1);
 v = zeros(42,1);
-error = 100;
 error2 = 0;
 delta_old = 1000;
-treshold = 0.0001;
 eps = 10^-8;
-counter = 1;
-while error2 < (1-10^-9)
+while error2 < (1-10^-3)
 
     % use current v to calculate the Identification Jacobian Matrix J
     for j = 1:height(psi)
@@ -80,11 +71,9 @@ while error2 < (1-10^-9)
         v(42) = v(42) + deltav(27);
     end
 
-    error(counter) = norm(deltaX);
-    counter = counter + 1;
     error2 = abs(norm(deltaX)/delta_old);
     delta_old = norm(deltaX);
     
 end
 
-fprintf('The norm of the error is: %f mm\n', error(end));
+end

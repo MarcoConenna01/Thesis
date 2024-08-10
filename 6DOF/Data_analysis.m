@@ -23,15 +23,3 @@ for i = 1:393
     rotation_matrix = quat2rotm(orientation_measured);
     position_measured_rotated(i,:) = rotation_matrix' * position_measured(i,:)';
 end
-
-%% TEST: compared to theoretical position
-v = zeros(59,1);
-for i = 1:393
-    theta = goodconf(i,2:7);
-    a = FK(theta,v);
-    theoretical_position(i,1:3) = a(1:3);
-end
-position_measured_rotated(:,1) = - position_measured_rotated(:,1);
-position_measured_rotated(:,2) = - position_measured_rotated(:,2);
-error = position_measured_rotated - theoretical_position;
-

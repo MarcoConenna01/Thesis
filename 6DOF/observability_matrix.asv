@@ -2,19 +2,19 @@ clc
 clear all
 close all
 
-% List of possible conf-wrench combinations
-n_parameters = 42;
-v = zeros(1,n_parameters);
-eps = 10^-9;
-
-load LRM_ARM_data/goodconf_corrected.mat
-configuration = goodconf_corrected;
-n_configuration = height(configuration);
-
-for big_loop = 1:4  
-   option = big_loop;
+for big_loop = 1:4
 
 
+    % List of possible conf-wrench combinations
+    n_parameters = 42;
+    v = zeros(1,n_parameters);
+    eps = 10^-9;
+    option = big_loop;
+    
+    load LRM_ARM_data/goodconf_corrected.mat
+    configuration = goodconf_corrected;
+    n_configuration = height(configuration);
+    
     % Observability Matrix
     counter = 0;
     flag = 0;
@@ -87,4 +87,5 @@ for big_loop = 1:4
 
 filename = sprintf('psi_%d.mat', big_loop);  % Creates filenames like file_1.mat, file_2.mat, etc.
 save(filename, "psi");
+
 end

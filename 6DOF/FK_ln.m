@@ -1,4 +1,4 @@
-function [P,t] = FK(theta, v) 
+function [P,t] = FK_ln(theta, v) 
 
     k = zeros(1,7);
     for i = 1:7
@@ -31,12 +31,12 @@ function [P, t] = End_effector_pos(theta, v)
     angle_gripper_beta = 0;
     x_gripper = 0;
     y_gripper = 0;
-    z_gripper = 73.27;
+    z_gripper = 130.38;
     angle_base_alpha = 0;
     angle_base_beta = pi/3;
-    x_base = 45.98;
+    x_base = -34.975172;
     y_base = 0;
-    z_base = 82.012391;
+    z_base = 236.08235;
 
     % calculation for the cm of target + weight
     cm_target = [24.32 2.1 4.33];
@@ -53,8 +53,8 @@ function [P, t] = End_effector_pos(theta, v)
            4.5466 0 53.125; ...
            0 0 29.164; ...
            0 0 45.12;
-           cm_tot]; %load
-    m = [123.4 177 101.6 132.8 106 81 m_tot]/1000; %in kg
+           cm_tot]; 
+    m = [123.4 177 101.6 132.8 106 81 m_tot];
 
     % add the calibration parameters to the geometric parameters
     alpha(1) = alpha(1) + v(1);
