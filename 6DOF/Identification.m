@@ -4,7 +4,8 @@ clearvars
 %% IDENTIFICATION
 
 % import chosen configurations
-load psi_loop
+load LRM_ARM_data/psi_3
+psi = psi_3;
 load LRM_ARM_data/goodconf_corrected
 goodconf = goodconf_corrected;
 option = 1;
@@ -29,7 +30,7 @@ error = 100;
 error2 = 0;
 delta_old = 1000;
 treshold = 0.0001;
-eps = 10^-8;
+eps = 10^-9;
 counter = 1;
 while error2 < (1-10^-9)
 
@@ -78,6 +79,8 @@ while error2 < (1-10^-9)
         v(32:34) = v(32:34) + deltav(22:24);
         v(38:39) = v(38:39) + deltav(25:26);
         v(42) = v(42) + deltav(27);
+    elseif option == 5
+        v(8:13) = v(8:13) + deltav;
     end
 
     error(counter) = norm(deltaX);

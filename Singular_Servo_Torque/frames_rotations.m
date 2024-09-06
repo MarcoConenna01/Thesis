@@ -44,12 +44,13 @@ k2 = (angle_rad2 - angle_rad1) / (t2-t1);
 k3 = (angle_rad3 - angle_rad2) / (t3-t2);
 
 weights = 1000*[0 cm_beam*m_beam + m_battery*0.15, cm_beam*m_beam + 2*m_battery*0.15, cm_beam*m_beam + 3*m_battery*0.15];
-plot(weights, [0 angle_deg1 angle_deg2 angle_deg3], "LineWidth",2)
+plot([0 t1 t2 t3], [0 angle_rad1 angle_rad2 angle_rad3], "LineWidth",2)
 hold on
-scatter(weights, [0 angle_deg1 angle_deg2 angle_deg3],50,"filled")
-xlabel("Weight at the end-effector [g]")
-ylabel("Angle Deflection [°]")
+scatter([0 t1 t2 t3], [0 angle_rad1 angle_rad2 angle_rad3],50,"filled")
+xlabel("Torque [Nm]")
+ylabel("Angle Deflection [rad]")
 grid on
+title("Elastic Angular Deformation of the AGF A80BHMF")
 
 function R = quaternionToRotationMatrix(q)
     % Extract quaternion components

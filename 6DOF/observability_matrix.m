@@ -11,9 +11,8 @@ load LRM_ARM_data/goodconf_corrected.mat
 configuration = goodconf_corrected;
 n_configuration = height(configuration);
 
-for big_loop = 1:4  
+for big_loop = 5 
    option = big_loop;
-
 
     % Observability Matrix
     counter = 0;

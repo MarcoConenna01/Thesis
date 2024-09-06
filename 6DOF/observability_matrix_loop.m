@@ -46,16 +46,17 @@ while flag == 0
     % check if max has coefficients positive
     psi2 = psi;
     [~, added] = max(O);
+
     while flag2 == 0
     psi2(n+1, :) = [configuration(added, :)];
     v_test = Identification_loop(option, psi2, goodconf_corrected, position_measured_rotated);
-    if any(v_test(7:13) < 0)
-        psi2 = psi;
-        O(added) = 0;
-        [~, added] = max(O);
-    else
-        flag2 = 1;
-    end
+        if any(v_test(7:13) < 0)
+            psi2 = psi;
+            O(added) = 0;
+            [~, added] = max(O);
+        else
+            flag2 = 1;
+        end
     end
     
     flag2 = 0;
@@ -76,8 +77,23 @@ while flag == 0
         O(i) = (prod(S))^(1/length(S))/(sqrt(n));
         clear Jacobian_total
     end
-    
+
+    psi2 = psi;
     [~, deleted] = max(O);
+
+    while flag2 == 0
+        psi2(deleted, :) = [];
+        v_test = Identification_loop(option, psi2, goodconf_corrected, position_measured_rotated);
+        if any(v_test(7:13) < 0)
+            psi2 = psi;
+            O(deleted) = 0;
+            [~, deleted] = max(O);
+        else
+            flag2 = 1;
+        end
+    end
+
+    flag2 = 0;
 
      % exit condition, deleted == added
     if psi(deleted,1) == added
@@ -93,5 +109,5 @@ while flag == 0
     toc
 end
 
-filename = sprintf('psi_loop.mat'); 
+filename = sprintf('psi_loop_3.mat'); 
 save(filename, "psi");

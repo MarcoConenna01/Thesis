@@ -3,8 +3,8 @@ clearvars
 
 %% Computations
 v = zeros(42,1);
-%theta = zeros(1,6);
-theta = pi/4*ones(1,6);
+theta = zeros(1,6);
+%theta = pi/4*ones(1,6);
 %theta = pi/2*ones(1,6);
 
 
@@ -68,3 +68,13 @@ grid on;
 set(gca, 'XDir', 'reverse');
 xlim([10^-15 5*10^-4])
 legend('Kinematic', 'Elastic')
+
+figure(4)
+plot(eps, J_norm_all, 'k-', 'LineWidth', 1);
+set(gca, 'XScale', 'log', 'YScale', 'log');
+xlabel('\epsilon', 'FontSize', 12); 
+ylabel('||J||', 'FontSize', 12);
+title('Norm of Jacobian vs. Step-size \epsilon [OPTION 1]', 'FontSize', 14);
+grid on;
+set(gca, 'XDir', 'reverse');
+xlim([10^-15 5*10^-4])

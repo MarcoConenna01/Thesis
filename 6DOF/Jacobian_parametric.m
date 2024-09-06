@@ -82,6 +82,8 @@ function [J] = Jacobian_parametric(theta, v, eps, option)
              df_dx_bx, df_dx_by, df_dx_bz, ...
              df_dx_Ty, df_dx_Tz ...
              df_dx_dd1];
+    elseif option == 5
+        J = [df_dx_tau1, df_dx_tau2, df_dx_tau3, df_dx_tau4, df_dx_tau5, df_dx_tau6];
     end
 
 end

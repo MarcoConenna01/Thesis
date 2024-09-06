@@ -21,7 +21,7 @@ x_est = zeros(height(psi),1);
 v = zeros(42,1);
 error2 = 0;
 delta_old = 1000;
-eps = 10^-8;
+eps = 10^-9;
 while error2 < (1-10^-3)
 
     % use current v to calculate the Identification Jacobian Matrix J
@@ -69,6 +69,8 @@ while error2 < (1-10^-3)
         v(32:34) = v(32:34) + deltav(22:24);
         v(38:39) = v(38:39) + deltav(25:26);
         v(42) = v(42) + deltav(27);
+    elseif option == 5
+        v(8:13) = v(8:13) + deltav;
     end
 
     error2 = abs(norm(deltaX)/delta_old);

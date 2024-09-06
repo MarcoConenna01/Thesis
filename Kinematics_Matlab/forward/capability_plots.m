@@ -67,6 +67,7 @@ end
 figure(2)
 scatter(xxx,yyy, 30, cap0, 'filled');
 colorbar;
+colormap(flipud(turbo));
 xlabel('X');
 ylabel('Y');
 title('2D Scatter on Ground level (z=0)');
@@ -93,6 +94,7 @@ end
 figure(3)
 scatter(xxx,yyy, 30, cap0, 'filled');
 colorbar;
+colormap(flipud(turbo));
 xlabel('X');
 ylabel('Y');
 title('2D Scatter on Basket level (z=227 mm)');
